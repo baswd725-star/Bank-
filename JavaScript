@@ -1,0 +1,158 @@
+let currentServiceKey = '';
+let currentServiceName = '';
+let currentStep = 1;
+let otpTimerInterval = null;
+
+// فتح نموذج الخدمة
+function openServiceModal(key, name) {
+    currentServiceKey = key;
+    currentServiceName = name;
+    document.getElementById('modalTitle').innerText = name;
+    
+    renderDynamicForm(key);
+    
+    currentStep = 1;
+    updateStepVisibility();
+    
+    document.getElementById('modalOverlay').classList.add('active');
+}
+
+// إغلاق النافذة
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    clearInterval(otpTimerInterval);
+}
+
+// الانتقال بين الخطوات
+function goToStep(step) {
+    currentStep = step;
+    updateStepVisibility();
+
+    if (step === 4) {
+        startOtpTimer();
+    }
+}
+
+// تحديث عرض الخطوات
+function updateStepVisibility() {
+    document.getElementById('stepIndicator').innerText = `الخطوة ${currentStep} من 4`;
+    
+    for (let i = 1; i <= 5; i++) {
+        const stepEl = document.getElementById(`step${i}`);
+        if (stepEl) {
+            stepEl.classList.remove('active');
+        }
+    }
+    
+    const activeStepEl = document.getElementById(`step${currentStep}`);
+    if (activeStepEl) {
+        activeStepEl.classList.add('active');
+    }
+}
+
+// بناء نموذج الخطوة الأولى بحسب الخدمة
+function renderDynamicForm(key) {
+    const container = document.getElementById('dynamicFormContainer');
+    let html = '';
+
+    switch (key) {
+        case 'raise_limit':
+            html = `
+                <div class="form-group">
+                    <label>السقف الحالي</label>
+                    <input type="text" class="form-control" value="25,000,000.00" readonly>
+                </div>
+                <div class="form-group">
+                    <label>السقف المطلوب</label>
+                    <input type="text" class="form-control" value="45,000,000.00" readonly>
+                </div>
+                <div class="form-group">
+                    <label>سبب طلب رفع السقف</label>
+                    <input type="text" class="form-control" placeholder="">
+                </div>
+            `;
+            break;
+
+        case 'wrong_transfer':
+            html = `
+                <div class="form-group">
+                    <label>رقم الحساب المُنقَل إليه بالخطأ</label>
+                    <input type="number" class="form-control" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label>رقم العملية / الإشعار</label>
+                    <input type="text" class="form-control" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label>المبلغ المراد استرداده</label>
+                    <input type="number" class="form-control" placeholder="">
+                </div>
+            `;
+            break;
+
+        case 'update_info':
+            html = `
+                <div class="form-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" class="form-control" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label>رقم الهوية / الرقم الوطني</label>
+                    <input type="text" class="form-control" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف الجديد</label>
+                    <input type="tel" class="form-control" placeholder="">
+                </div>
+            `;
+            break;
+
+        default:
+            html = `
+                <div class="form-group">
+                    <label>ملاحظات أو تفاصيل الطلب</label>
+                    <textarea class="form-control" rows="4" placeholder=""></textarea>
+                </div>
+            `;
+            break;
+    }
+
+    container.innerHTML = html;
+}
+
+// بدء عداد الـ OTP لمدة 1 ساعة (3600 ثانية)
+function startOtpTimer() {
+    clearInterval(otpTimerInterval);
+    let duration = 3600; 
+    const timerDisplay = document.getElementById('otpTimerDisplay');
+
+    otpTimerInterval = setInterval(() => {
+        let minutes = parseInt(duration / 60, 10);
+        let seconds = parseInt(duration % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        timerDisplay.textContent = minutes + ":" + seconds;
+
+        if (--duration < 0) {
+            clearInterval(otpTimerInterval);
+            timerDisplay.textContent = "انتهت الصلاحية";
+        }
+    }, 1000);
+}
+
+// تقديم الطلب النهائي وتجهيز زر الواتساب
+function submitFinalRequest() {
+    clearInterval(otpTimerInterval);
+    
+    const accNum = document.getElementById('accountNumber').value || 'غير محدد';
+    const message = `مرحباً، أود تأكيد عملية طلب خدمة (${currentServiceName}) لحساب رقم: ${accNum}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+
+    document.getElementById('whatsappBtn').href = whatsappUrl;
+
+    currentStep = 5;
+    updateStepVisibility();
+    document.getElementById('stepIndicator').innerText = "تم إكمال الطلب";
+}
